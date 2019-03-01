@@ -10,19 +10,6 @@
 	}
 ?>
 
-
-<?php
-	if ($_SESSION['visit'] == 1) {
-?>
-		<script type="text/javascript">
-    		$(window).on('load',function(){
-        		$('#ModalCenter').modal('show');
-    		});
-		</script>
-<?php
-	}
-?>
-
 <?php
 	if (isset($_POST['catview'])) {
 		$catname = $_POST['category'];
@@ -136,11 +123,11 @@
 </div>
 <br><br>
 <div class="form-group" style="float: right" id="menu">
-	<a href="#"><button class="btn btn-primary" type="button" data-toggle="modal" data-target="#ModalCenter" style="background-color: #2A877E; width: 200px; margin-bottom: 10px" >
+	<a href="#"><button class="btn btn-primary" type="button" data-toggle="modal" data-target="#ModalCenter" style="background-color: #2A877E; width: 200px;" >
 		<span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> | View Cart
 	</button></a>	|
-	<a href="view.php?tabno=<?php echo($tno) ?>"><button class="btn btn-primary" style="background-color: #2A877E; width: 200px;  margin-bottom: 10px">View all Order</button></a>	|
-	<a href="session_table.php"><button class="btn btn-primary" style="background-color: #2A877E; width: 200px; margin-right: 50px ">Back to Table Selection</button></a>
+	<a href="view.php?tabno=<?php echo($tno) ?>"><button class="btn btn-primary" style="background-color: #2A877E; width: 200px;">View all Order</button></a>	|
+	<a href="session_table.php"><button class="btn btn-primary" style="background-color: #2A877E; width: 200px;">Back to Table Selection</button></a>
 </div>
 
 <div class="container">
