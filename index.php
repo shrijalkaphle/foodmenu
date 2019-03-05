@@ -49,28 +49,44 @@
 		function addProductToCart(tableNo,productId,qty){
 
 			let datas = {
+				
 				"id":productId,
+
 				"tableNo":tableNo,
+
 				"qty":qty
+
 			};
+
 			datas= JSON.stringify(datas);
+
 			$.ajax({
 					url: "addProductToCart.php",
+
 					type: "post",
+					
 					data: datas,
+
 				success: function (response) {
+
 					console.log(response);
+
 				},
 				error: function(jqXHR, textStatus, errorThrown) {
+
 					console.log(textStatus, errorThrown);
+
 				}
 			});
 
 		}
 
 		function modifyQuantity(action,id){
+
 			console.log("Button Clicked");
+
 			let selector = ".product-qty-"+id;
+
 			let qty = parseInt(document.querySelector(selector).innerHTML);
 			
 			let datas = {
@@ -127,23 +143,38 @@
 	<br>
 	<div class="container">
 		<br>
-		<h1 class="text-center"><img src="images/food-menu.png"></h1>
+		<h1 class="text-center"><img class="foodmenu-img" src="images/food-menu.png"></h1>
 	</div>
 </div>
 <br><br>
-<div class="form-group" style="float: right" id="menu">
-	<a href="#"><button class="btn btn-primary" type="button" data-toggle="modal" data-target="#ModalCenter" style="background-color: #2A877E; width: 200px;" >
-		<span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> | View Cart
-	</button></a>	|
-	<a href="view.php?tabno=<?php echo($tno) ?>"><button class="btn btn-primary" style="background-color: #2A877E; width: 200px;">View all Order</button></a>	|
-	<a href="session_table.php"><button class="btn btn-primary" style="background-color: #2A877E; width: 200px;">Back to Table Selection</button></a>
-</div>
 
 <div class="container">
-	<form class="form-inline" method="post">
-		<input type="text" class="form-control" placeholder="Search" style="width: 200px" name="name">&nbsp;
-		<input type="submit" name="search" class="btn btn-primary" style="background-color: #2A877E" value="Search">
-	</form>
+	<div class="row">
+		<div class="col-md-6">
+			<div>
+				<form class="form-inline" method="post">
+					<input type="text" class="form-control search-text-field" placeholder="Search" name="name">
+					<input type="submit" name="search" class="search-button btn btn-primary" style="background-color: #2A877E" value="Search">
+				</form>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="row form-group buttons-div"  id="menu">
+				<div class="col-md-4">
+					<a href="#"><button class="btn btn-primary cart" type="button" data-toggle="modal" data-target="#ModalCenter" style="background-color: #2A877E;" >
+						<span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>  View Cart
+					</button></a>	
+				</div>
+				<div class="col-md-4">
+					<a href="view.php?tabno=<?php echo($tno) ?>"><button class="btn btn-primary" style="background-color: #2A877E; ">View all Order</button></a>	
+				</div>
+				<div class="col-md-4">	
+					<a href="session_table.php"><button class="btn btn-primary" style="background-color: #2A877E;">Back to Table Selection</button></a>
+				</div>
+			</div>
+		</div>
+		
+	</div>
 </div>
 
 <div>
