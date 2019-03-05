@@ -4,7 +4,7 @@
 	$query = "INSERT INTO history (SELECT * FROM pending WHERE id='$id')";
 	$result = mysqli_query($conn,$query);
 
-	$row
+	// $row
 
 	$query2 = "DELETE FROM pending WHERE id='$id'";
 	$result2 = mysqli_query($conn,$query2);

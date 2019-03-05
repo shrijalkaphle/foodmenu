@@ -42,65 +42,74 @@
 ?>
 
 
-<?php
-	if (isset($_POST['add'])) {
-		$id = $_POST['id'];
-		$table = $_SESSION['table'];
-		
-		//check if product exist
-
-		$query = "SELECT * FROM cart WHERE productid = '$id'";
-		$result = mysqli_query($conn,$query) or die('error');
-		$r = mysqli_fetch_assoc($result);
-		$num = mysqli_num_rows($result);
-
-		if ($num == 0) {
-			$query = "INSERT INTO cart(tableno,productid,qty) VALUES ('$table','$id','1')";
-			$result = mysqli_query($conn,$query) or die('error');
-		} else {
-			$oqty = $r['qty'];
-			$id = $r['id'];
-
-			$nqty = 1 + $oqty;
-
-			$query = "UPDATE cart SET qty = '$nqty' WHERE id = '$id'";
-			$result = mysqli_query($conn,$query);
-		}
-		echo "<script>modal.style.display = 'block';</script>";
-	}
-?>
 
 <head>
 	<title>Food Order System</title>
 	<script type="text/javascript">
-		function add(n,id) {
-			n++;
+		function addProductToCart(tableNo,productId,qty){
+
+			let datas = {
+				"id":productId,
+				"tableNo":tableNo,
+				"qty":qty
+			};
+			datas= JSON.stringify(datas);
 			$.ajax({
-				type:'post',
-				url:'add_qty.php',
-				data: {
-					qty:n,
-					id:id
+					url: "addProductToCart.php",
+					type: "post",
+					data: datas,
+				success: function (response) {
+					console.log(response);
 				},
-				success: function(response) {
-					window.location.href = 'index.php';
+				error: function(jqXHR, textStatus, errorThrown) {
+					console.log(textStatus, errorThrown);
 				}
 			});
+
 		}
 
-		function minus(n,id) {
-			n--;
+		function modifyQuantity(action,id){
+			console.log("Button Clicked");
+			let selector = ".product-qty-"+id;
+			let qty = parseInt(document.querySelector(selector).innerHTML);
+			
+			let datas = {
+				"action":action,
+				"id":id,
+			}
+			if(action=="substract"){	
+
+				qty--;
+
+				datas.qty = qty;
+
+			}else{
+
+				qty++;
+
+				datas.qty = qty;
+
+			}
+
+			document.querySelector(selector).innerHTML = qty;
+
+			datas = JSON.stringify(datas);
+
+			console.log(datas);
+
 			$.ajax({
-				type:'post',
-				url:'sub_qty.php',
-				data: {
-					qty:n,
-					id:id
+					url: "modifyQty.php",
+					type: "post",
+					data: datas,
+				success: function (response) {
+					console.log(response);
 				},
-				success: function(response) {
-					window.location.href = 'index.php';
+				error: function(jqXHR, textStatus, errorThrown) {
+					console.log(textStatus, errorThrown);
 				}
 			});
+
+
 		}
 
 		function funOrder() {
@@ -183,12 +192,10 @@
 						</div>
 					</div>
 					<div class="middle">
-						<form method="post">
 							<input type="text" name="id" id="fid" value="<?php echo $row['id']; ?>" hidden>
     						<div class="text">
-    							<input type="submit" name="add" class="btn btn-default" value="Add Order" >
+    							<input type="submit" name="add" class="btn btn-default" value="Add Order" onclick="addProductToCart(<?php echo $_SESSION['table'] ?>,<?php echo $row['id']; ?>,1)" >
     						</div>
-    					</form>
   					</div>
 				</div>
 			</div>
@@ -273,12 +280,12 @@
         				<td><?php echo $row1['price']; ?></td>
         				<td>
         					<?php $qty =  $row['qty']; ?>
-        					<button class="btn btn-default">
-								<span class="glyphicon glyphicon-minus" onclick="minus(<?php echo $qty ?>,<?php echo $row['id'] ?>)" aria-hidden="true"></span>
+        					<button class="btn btn-default" onclick="modifyQuantity('substract',<?php echo $row['id'] ?>)">
+								<span class="glyphicon glyphicon-minus"  aria-hidden="true"></span>
 							</button>
-							<?php echo $qty; ?>
-							<button class="btn btn-default">
-								<span class="glyphicon glyphicon-plus" onclick="add(<?php echo $qty ?>,<?php echo $row['id'] ?>)" aria-hidden="true"></span>
+							<span class="product-qty-<?php echo $row['id'] ?>"><?php echo $qty ?></span>
+							<button class="btn btn-default" onclick="modifyQuantity('add',<?php echo $row['id'] ?>)">
+								<span class="glyphicon glyphicon-plus"  aria-hidden="true"></span>
 							</button>
         					</td>
         				<td>Rs.
