@@ -92,7 +92,8 @@
 			let datas = {
 				"action":action,
 				"id":id,
-			}
+			}; 
+
 			if(action=="substract"){	
 
 				qty--;
@@ -107,7 +108,8 @@
 
 			}
 
-			document.querySelector(selector).innerHTML = qty;
+			let qtyString = " " + qty + " ";
+			document.querySelector(selector).innerHTML = qtyString;
 
 			datas = JSON.stringify(datas);
 
@@ -119,6 +121,207 @@
 					data: datas,
 				success: function (response) {
 					console.log(response);
+				},
+				error: function(jqXHR, textStatus, errorThrown) {
+					console.log(textStatus, errorThrown);
+				}
+			});
+
+
+		}
+
+		function loadCart(tableNo){
+
+			let requestData = {
+				"tableNo" : tableNo
+			};
+
+			requestData = JSON.stringify(requestData);
+
+			$.ajax({
+					url: "getCartData.php",
+					type: "post",
+					data: requestData,
+				success: function (response) {
+					setDataToCartModal(response,tableNo);
+				},
+				error: function(jqXHR, textStatus, errorThrown) {
+					console.log(textStatus, errorThrown);
+				}
+			});
+
+		}
+
+		function setDataToCartModal(data,tableNo){
+
+			let tbody = document.querySelector(".cart-body")
+
+			/* 
+				1. Add a TR
+				2. Add Price
+				3. Add Quantity and + -
+ 				4. Add Subtotal 
+				5. Add delete
+				6. End TR
+
+			*/
+
+			let totalPrice = 0;
+
+			while(tbody.hasChildNodes())
+			{
+				tbody.removeChild(tbody.firstChild);
+			}
+
+			if(Object.keys(data).length+1 != tbody.rows.length){
+
+				data.forEach(function(dataItem){
+
+					let newRow = tbody.insertRow(tbody.rows.length);
+
+					let firstCell = newRow.insertCell(0);
+					let secondCell = newRow.insertCell(1);
+					let thirdCell = newRow.insertCell(2);
+					let fourthCell = newRow.insertCell(3);
+					let fifthCell = newRow.insertCell(4);
+
+					let nameText = document.createTextNode(dataItem.name);
+					let priceText = document.createTextNode(dataItem.price);
+					
+					
+					/*======= Name Cell =======*/
+					firstCell.appendChild(nameText);
+
+					/*======= Price Cell =======*/
+					secondCell.appendChild(priceText);
+					
+
+					/*======= Quantity Cell =======*/
+					//Minus Button
+					let minusButton = document.createElement("button");
+					minusButton.className = "btn btn-default";
+					minusButton.setAttribute("onclick","modifyQuantity('subtract',"+dataItem.cartId+")");
+
+					let minusIconSpan = document.createElement("span");
+					minusIconSpan.className = "glyphicon glyphicon-minus";
+					minusIconSpan.setAttribute("aria-hidden","true");
+
+					minusButton.appendChild(minusIconSpan);
+
+					//Product Price Span
+					let productQtySpan = document.createElement("span");
+					productQtySpan.className="product-qty-"+dataItem.cartId;
+					productQtySpan.innerHTML = " " + dataItem.quantity + " ";
+
+					//Plus Button
+					let plusButton = document.createElement("button");
+					plusButton.className = "btn btn-default";
+					plusButton.setAttribute("onclick","modifyQuantity('add',"+dataItem.cartId+")");
+
+					let plusIconSpan = document.createElement("span");
+					plusIconSpan.className = "glyphicon glyphicon-plus";
+					plusIconSpan.setAttribute("aria-hidden","true");
+
+					plusButton.appendChild(plusIconSpan);
+
+					let quantityDiv = document.createElement("div");
+					quantityDiv.className = "quantity-div";
+					quantityDiv.appendChild(minusButton);
+					quantityDiv.appendChild(productQtySpan);
+					quantityDiv.appendChild(plusButton);
+
+					thirdCell.appendChild(quantityDiv);
+
+					/*======= SubTotal Cell =======*/
+					let price = parseInt(dataItem.quantity) * parseInt(dataItem.price);
+					let subTotalText = document.createTextNode("Rs. "+price);
+					totalPrice += price;
+					
+					fourthCell.appendChild(subTotalText);
+
+
+					/*======= Delete Cell =======*/
+					//Delete Link
+					let deleteLink = document.createElement("a");
+					deleteLink.setAttribute('onclick','deleteCartEntry('+dataItem.cartId+','+tableNo+')');
+					
+					//Trash Button
+					let trashButton = document.createElement("button");
+					trashButton.className = "btn btn-default";
+
+					//Span
+					let trashIconSpan = document.createElement("span");
+					trashIconSpan.className = "glyphicon glyphicon-trash";
+					trashIconSpan.setAttribute("aria-hidden","true");
+
+					trashButton.appendChild(trashIconSpan);
+					deleteLink.appendChild(trashButton);
+					
+					fifthCell.appendChild(deleteLink);
+
+				
+					
+				});
+
+
+				/*====== Total =====*/
+
+				//First Cell
+
+				let newRow = tbody.insertRow(tbody.rows.length);
+
+
+				let totalTextTD = document.createElement("td");
+				totalTextTD.colSpan = 3;
+				
+				let h4 = document.createElement("h4");
+				h4.setAttribute("style","float: right");
+				
+				let textNode = document.createTextNode("Total: ");
+				h4.appendChild(textNode);
+
+				totalTextTD.appendChild(h4);
+
+				newRow.appendChild(totalTextTD);
+
+				//Second Cell
+
+				let secondCell = newRow.insertCell(1);
+
+				let priceTD = document.createElement("td");
+				
+				let priceh4 = document.createElement("h4");
+				
+				let priceTextNode = document.createTextNode("Rs. "+totalPrice);
+				priceh4.appendChild(priceTextNode);
+
+				priceTD.appendChild(priceh4);
+
+				newRow.appendChild(priceTD);
+
+
+
+
+			}
+
+
+
+		}
+
+		function deleteCartEntry(id,tableNo){
+
+			let requestData = {
+				"id" : id
+			};
+
+			requestData = JSON.stringify(requestData);
+
+			$.ajax({
+					url: "deleteCartItem.php",
+					type: "post",
+					data: requestData,
+				success: function (response) {
+					loadCart(tableNo);
 				},
 				error: function(jqXHR, textStatus, errorThrown) {
 					console.log(textStatus, errorThrown);
@@ -161,7 +364,7 @@
 		<div class="col-md-6">
 			<div class="row form-group buttons-div"  id="menu">
 				<div class="col-md-4">
-					<a href="#"><button class="btn btn-primary cart" type="button" data-toggle="modal" data-target="#ModalCenter" style="background-color: #2A877E;" >
+					<a href="#"><button class="btn btn-primary cart" type="button" onclick="loadCart(<?php echo $tno ?>)" data-toggle="modal" data-target="#ModalCenter" style="background-color: #2A877E;" >
 						<span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>  View Cart
 					</button></a>	
 				</div>
@@ -296,51 +499,9 @@
         		<td>Subtotal</td>
         		<td></td>
         	</thead>
-        	<?php
-        		$total = null;
-        		$query = "SELECT * FROM cart WHERE tableno = '$tno'";
-        		$result = mysqli_query($conn,$query);
-        		while ($row=mysqli_fetch_assoc($result)) :
-        			$id = $row['productid'];
-        			$query1 = "SELECT * FROM product WHERE id = '$id'";
-        			$result1 = mysqli_query($conn,$query1);
-        			$row1=mysqli_fetch_assoc($result1);
-        	?>
-        	<tr>
-        				<td><?php echo $row1['name']; ?></td>
-        				<td><?php echo $row1['price']; ?></td>
-        				<td>
-        					<?php $qty =  $row['qty']; ?>
-        					<button class="btn btn-default" onclick="modifyQuantity('substract',<?php echo $row['id'] ?>)">
-								<span class="glyphicon glyphicon-minus"  aria-hidden="true"></span>
-							</button>
-							<span class="product-qty-<?php echo $row['id'] ?>"><?php echo $qty ?></span>
-							<button class="btn btn-default" onclick="modifyQuantity('add',<?php echo $row['id'] ?>)">
-								<span class="glyphicon glyphicon-plus"  aria-hidden="true"></span>
-							</button>
-        					</td>
-        				<td>Rs.
-        					<?php
-        						$stotal = $row1['price'] * $row['qty'];
-        						$total = $total + $stotal;
-        						echo $stotal;
-        					?>
-        				</td>
-        				<td>
-        					<a href="delete.php?id=<?php echo $row['id']?>">
-        						<button class="btn btn-default">
-									<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-								</button>
-							</a>
-        				</td>
-        	</tr>
-        	<?php
-        		endwhile; 
-        	?>
-        	<tr>
-        		<td colspan="3"><h4 style="float: right">Total : </h4></td>
-        		<td><h4>Rs. <?php echo $total; ?></h4></td>
-        	</tr>
+        	<tbody class="cart-body">
+				
+			</tbody>
         </table>
       </div>
       <div class="modal-footer">
