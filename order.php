@@ -31,6 +31,6 @@
 
 	echo "<script>alert('Order Successfull')</script>";
 
-	echo "<script>window.location = 'index.php</script>";
+	header('Location: index.php');
 
 ?>

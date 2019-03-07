@@ -14,8 +14,8 @@
 		//date_default_timezone_set('Asia/Kathmandu');
 		$date = date('Y-m-d H:i:s');
 
-		$query1 = "INSERT INTO sales(productid,qty,date,time) VALUES ('$pid','$qty','$date')";
-		$result1 = mysqli_query($conn,$query1);
+		$query1 = "INSERT INTO sales(productid,qty,datetime) VALUES ('$pid','$qty','$date')";
+		$result1 = mysqli_query($conn,$query1) or die('error');
 	}
 
 	$query2 = "DELETE FROM ordered WHERE tableno='$table'";

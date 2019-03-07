@@ -60,10 +60,6 @@
         ?>
         <li><a href="logout.php"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span></a></li>
         <?php
-          } else {
-        ?>
-        <li><a href="login.php"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></a></li>
-        <?php
           }
         ?>
       </ul>

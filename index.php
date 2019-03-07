@@ -78,6 +78,12 @@
 
 				}
 			});
+			
+			loadCart(tableNo);
+
+			var modal = document.getElementById('ModalCenter');
+
+			modal.style.display = "block";
 
 		}
 
@@ -87,6 +93,8 @@
 
 			let selector = ".product-qty-"+id;
 
+			let priceSelector = "product-qty-"+id;
+1
 			let qty = parseInt(document.querySelector(selector).innerHTML);
 			
 			let datas = {
@@ -94,9 +102,20 @@
 				"id":id,
 			}; 
 
+			let price = document.querySelector(".product-row-"+id).querySelector(".product-price").innerHTML;
+
+
+
+			let updatedPrce;
+
 			if(action=="substract"){	
 
 				qty--;
+
+				updatedPrice = price * qty;
+
+
+				// updateTotalPrice();
 
 				datas.qty = qty;
 
@@ -104,9 +123,15 @@
 
 				qty++;
 
+				updatedPrice = parseInt(price) * parseInt(qty);
+
+				// updateTotalPrice();
+
 				datas.qty = qty;
 
 			}
+
+			document.querySelector(".product-row-"+id).querySelector(".product-subtotal-price").innerHTML = "Rs. " + updatedPrice;
 
 			let qtyString = " " + qty + " ";
 			document.querySelector(selector).innerHTML = qtyString;
@@ -126,6 +151,25 @@
 					console.log(textStatus, errorThrown);
 				}
 			});
+
+
+		}
+
+		function updateTotalPrice(){
+
+			let tbody = document.querySelector(".cart-body");
+			let totalPrice;
+			let r=0;
+
+			while(row=tbody.rows[r++])
+			{
+			  let price = parseInt(row.querySelector(".product-subtotal-price").innerHTML);
+			  totalPrice += price;
+
+			}
+
+			document.querySelector(".total-cart-price").innerHTML = "Rs. " + totalPrice;
+
 
 
 		}
@@ -178,6 +222,7 @@
 				data.forEach(function(dataItem){
 
 					let newRow = tbody.insertRow(tbody.rows.length);
+					newRow.className = "product-row-"+dataItem.cartId;
 
 					let firstCell = newRow.insertCell(0);
 					let secondCell = newRow.insertCell(1);
@@ -194,13 +239,14 @@
 
 					/*======= Price Cell =======*/
 					secondCell.appendChild(priceText);
+					secondCell.className = "product-price";
 					
 
 					/*======= Quantity Cell =======*/
 					//Minus Button
 					let minusButton = document.createElement("button");
 					minusButton.className = "btn btn-default";
-					minusButton.setAttribute("onclick","modifyQuantity('subtract',"+dataItem.cartId+")");
+					minusButton.setAttribute("onclick","modifyQuantity('substract',"+dataItem.cartId+")");
 
 					let minusIconSpan = document.createElement("span");
 					minusIconSpan.className = "glyphicon glyphicon-minus";
@@ -236,7 +282,8 @@
 					let price = parseInt(dataItem.quantity) * parseInt(dataItem.price);
 					let subTotalText = document.createTextNode("Rs. "+price);
 					totalPrice += price;
-					
+
+					fourthCell.className = "product-subtotal-price";					
 					fourthCell.appendChild(subTotalText);
 
 
@@ -289,6 +336,7 @@
 				let secondCell = newRow.insertCell(1);
 
 				let priceTD = document.createElement("td");
+				priceTD.className = ".total-cart-price";
 				
 				let priceh4 = document.createElement("h4");
 				
@@ -364,7 +412,7 @@
 		<div class="col-md-6">
 			<div class="row form-group buttons-div"  id="menu">
 				<div class="col-md-4">
-					<a href="#"><button class="btn btn-primary cart" type="button" onclick="loadCart(<?php echo $tno ?>)" data-toggle="modal" data-target="#ModalCenter" style="background-color: #2A877E;" >
+					<a href="#"><button class="btn btn-primary showcart-button" type="button" onclick="loadCart(<?php echo $tno ?>)" data-toggle="modal" data-target="#ModalCenter" style="background-color: #2A877E;" >
 						<span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>  View Cart
 					</button></a>	
 				</div>
@@ -428,7 +476,7 @@
 					<div class="middle">
 							<input type="text" name="id" id="fid" value="<?php echo $row['id']; ?>" hidden>
     						<div class="text">
-    							<input type="submit" name="add" class="btn btn-default" value="Add Order" onclick="addProductToCart(<?php echo $_SESSION['table'] ?>,<?php echo $row['id']; ?>,1)" >
+    							<input type="submit" name="add" class="btn btn-default" value="Add Order" onclick="addProductToCart(<?php echo $_SESSION['table'] ?>,<?php echo $row['id']; ?>,1)" data-toggle="modal" data-target="#ModalCenter">
     						</div>
   					</div>
 				</div>
