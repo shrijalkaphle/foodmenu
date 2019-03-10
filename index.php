@@ -70,6 +70,7 @@
 				success: function (response) {
 
 					console.log(response);
+					loadCart(tableNo);
 
 				},
 				error: function(jqXHR, textStatus, errorThrown) {
@@ -79,11 +80,12 @@
 				}
 			});
 			
-			loadCart(tableNo);
+			
 
-			var modal = document.getElementById('ModalCenter');
+			//toggle tick
+			toggleTick(productId);
 
-			modal.style.display = "block";
+			
 
 		}
 
@@ -193,6 +195,43 @@
 					console.log(textStatus, errorThrown);
 				}
 			});
+
+		}
+
+		function toggleTick(id){
+			let foodDivSelector = ".single-food-"+id;
+			let foodDiv = document.querySelector(foodDivSelector);
+			foodDiv.querySelector(".tick-image").style.visibility = "visible";
+		}
+
+		function setInitalTicks(tableNo){
+
+			let requestData = {
+				"tableNo" : tableNo
+			};
+
+			requestData = JSON.stringify(requestData);
+
+			$.ajax({
+					url: "getCartData.php",
+					type: "post",
+					data: requestData,
+				success: function (response) {
+
+					response.forEach(function(dataItem){
+
+						toggleTick(dataItem.productId);
+
+
+					})
+				
+				},
+				error: function(jqXHR, textStatus, errorThrown) {
+					console.log(textStatus, errorThrown);
+				}
+			});
+
+
 
 		}
 
@@ -348,8 +387,6 @@
 				newRow.appendChild(priceTD);
 
 
-
-
 			}
 
 
@@ -382,6 +419,8 @@
 		function funOrder() {
 			document.getElementById('menu').scrollIntoView();
 		}
+
+	
 	</script>
 </head>
 
@@ -461,10 +500,13 @@
 		while ($row = mysqli_fetch_assoc($result1)):
 	?>
 			<div class="col-md-4 col-sm-6">
-				<div class="single-food">
+				<div class="single-food single-food-<?php echo $row['id']; ?>">
+					
 					<div class="food-img">
-						<img src="images/<?php echo $row['image'];?>" class="img-fluid" alt>
+						<img src="images/<?php echo $row['image'];?>" class="img-fluid food-image" alt>
+						<img class="tick-image" src="images/tick.png">
 					</div>
+				
 					<div class="food-content">
 						<div class="d-flex justify-content-between">
 							<h3>
@@ -566,5 +608,10 @@
     	if (ask) {
         	window.location = 'order.php?tno=<?php echo($tno) ?>';
     	}
+	}
+
+	//Set Product Ticks
+	window.onload = function(){
+			setInitalTicks(7);
 	}
 </script>

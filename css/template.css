@@ -30,14 +30,14 @@
   height: 300px;
 }
 
-.food-img img {
+.food-img img.food-image {
   height: 300px;
   max-width: 100%;
   -moz-transition: all 0.3s;
   -webkit-transition: all 0.3s;
   transition: all 0.3s;
 }
-.single-food:hover img {
+.single-food:hover img.food-image {
   -moz-transform: scale(1.1);
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
@@ -65,6 +65,17 @@
   border: 0;
 }
 
+/* Tick Image */
+.tick-image{
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  visibility: hidden;
+}
+
+
 .custom_plus {
   margin-left: -4px;
   border: 0;
@@ -87,15 +98,6 @@
 
 
 
-/* @media only screen 
-  and (min-device-width: 320px) 
-  and (max-device-width: 480px)
-  and (-webkit-min-device-pixel-ratio: 2)
-  and (orientation: portrait) {
-
-  
-} */
-
 @media all and (max-width: 480px) { 
   .buttons-div button{
     margin-bottom: 10px;
@@ -114,3 +116,5 @@
   }
 
 }
+
+

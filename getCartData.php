@@ -25,9 +25,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
     /*
     Format
         {
-            "name":"Momo",
-            "price":"Price",
-            "quantity":"2",
+            "cartId": "21",
+            "name": "CocaCola",
+            "price": "150",
+            "productId": "3",
+            "quantity": "1"
         }
     
     
@@ -52,6 +54,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                 'name'=>$productResultRow['name'],
 
                 'price'=>$productResultRow['price'],
+
+                'productId'=>$productResultRow['id'],
 
                 'quantity'=>$row['qty']
 
