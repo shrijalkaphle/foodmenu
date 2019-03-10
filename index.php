@@ -416,6 +416,33 @@
 
 		}
 
+		function dynamicSearch(){
+
+			const searchBar = document.querySelector(".search-text-field");
+
+			searchBar.addEventListener('keyup',function(e){
+
+				const term = e.target.value.toLowerCase();
+
+				const foods = document.querySelectorAll(".single-food-div");
+
+				Array.from(foods).forEach(function(food){
+
+					const title = food.querySelector(".food-name").innerHTML;
+					if(title.toLowerCase().indexOf(term)!= -1){
+						food.style.display = 'block';
+					}else{
+						food.style.display = 'none';
+					}
+		
+				})
+
+			});
+
+
+
+		}
+
 		function funOrder() {
 			document.getElementById('menu').scrollIntoView();
 		}
@@ -495,11 +522,11 @@
 <br><br>
 <div>
 	<div class="container">
-	<div class="row">
+	<div class="row foods">
 	<?php
 		while ($row = mysqli_fetch_assoc($result1)):
 	?>
-			<div class="col-md-4 col-sm-6">
+			<div class="col-md-4 single-food-div col-sm-6">
 				<div class="single-food single-food-<?php echo $row['id']; ?>">
 					
 					<div class="food-img">
@@ -509,8 +536,8 @@
 				
 					<div class="food-content">
 						<div class="d-flex justify-content-between">
-							<h3>
-								<?php echo $row['name']; ?>
+							<h3 class="food-menu">
+								<span class="food-name"><?php echo $row['name']; ?></span>
 								<span class="style-change">Rs. <?php echo $row['price']; ?></span>
 							</h3>
 						</div>
@@ -613,5 +640,6 @@
 	//Set Product Ticks
 	window.onload = function(){
 			setInitalTicks(7);
+			dynamicSearch();
 	}
 </script>
