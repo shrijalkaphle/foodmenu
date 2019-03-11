@@ -29,6 +29,11 @@
 	$query4 = "INSERT INTO order_details(tableno,price) VALUES ('$tno','$total')";
 	$result4 = mysqli_query($conn,$query4);
 
+	//Notifications Table
+	$message = "Table ".$tno." has placed an order";
+	$insertIntoNotificationsTableQuery = "INSERT INTO notifications(message) VALUES('$message')";
+	$notificationsTableQueryResult = mysqli_query($conn,$insertIntoNotificationsTableQuery);
+
 	echo "<script>alert('Order Successfull')</script>";
 
 	header('Location: index.php');

@@ -471,7 +471,6 @@
 			<div>
 				<form class="form-inline" method="post">
 					<input type="text" class="form-control search-text-field" placeholder="Search" name="name">
-					<input type="submit" name="search" class="search-button btn btn-primary" style="background-color: #2A877E" value="Search">
 				</form>
 			</div>
 		</div>
