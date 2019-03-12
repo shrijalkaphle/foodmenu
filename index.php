@@ -148,6 +148,7 @@
 					data: datas,
 				success: function (response) {
 					console.log(response);
+					updateTotalPrice();
 				},
 				error: function(jqXHR, textStatus, errorThrown) {
 					console.log(textStatus, errorThrown);
@@ -160,17 +161,19 @@
 		function updateTotalPrice(){
 
 			let tbody = document.querySelector(".cart-body");
-			let totalPrice;
-			let r=0;
+			let totalPrice = 0;
 
-			while(row=tbody.rows[r++])
-			{
-			  let price = parseInt(row.querySelector(".product-subtotal-price").innerHTML);
-			  totalPrice += price;
+			let productRows = tbody.querySelectorAll(".product-row");
 
-			}
+			Array.from(productRows).forEach(function(productRow){
 
-			document.querySelector(".total-cart-price").innerHTML = "Rs. " + totalPrice;
+				totalPrice += parseInt(productRow.querySelector(".product-subtotal-price").innerHTML.split(" ")[1]);
+		
+			})
+
+			console.log(totalPrice);
+
+			document.querySelector(".total-cart-price").getElementsByTagName("h4")[0].innerHTML = "Rs. " + totalPrice;
 
 
 
@@ -261,7 +264,7 @@
 				data.forEach(function(dataItem){
 
 					let newRow = tbody.insertRow(tbody.rows.length);
-					newRow.className = "product-row-"+dataItem.cartId;
+					newRow.className = "product-row product-row-"+dataItem.cartId;
 
 					let firstCell = newRow.insertCell(0);
 					let secondCell = newRow.insertCell(1);
@@ -375,7 +378,7 @@
 				let secondCell = newRow.insertCell(1);
 
 				let priceTD = document.createElement("td");
-				priceTD.className = ".total-cart-price";
+				priceTD.className = "total-cart-price";
 				
 				let priceh4 = document.createElement("h4");
 				
