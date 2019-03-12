@@ -2,17 +2,19 @@
   include 'include/dbconnect.php';
  ?>
 
-<div class="container">
+<div class="container order-div">
   <h2>Order</h2>
-  <table class="table table-striped">
+  <table class="table order-table table-striped">
     <thead>
       <td>Table Number</td>
       <td>Total</td>
       <td></td>
     </thead>
+    <tbody class="order-table-body">
     <?php
       $query = "SELECT * FROM order_details";
       $result = mysqli_query($conn,$query);
+      $row_cnt = mysqli_num_rows($result);
       while ($row = mysqli_fetch_assoc($result)) :
     ?>
     <tr>
@@ -28,5 +30,6 @@
     <?php
       endwhile;
     ?>
+    </tbody>
   </table>
 </div>

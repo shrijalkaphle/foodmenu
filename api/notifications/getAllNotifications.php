@@ -5,7 +5,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
     include "../../include/dbconnect.php";
     
     /*============ Send Data ===========*/
-    $sql = "SELECT * FROM notifications";
+    $sql = "SELECT * FROM notifications WHERE seen_status = 0";
     //Check if sucess
     $q = mysqli_query($conn,$sql);
     $rows = array();

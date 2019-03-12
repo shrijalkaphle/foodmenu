@@ -24,5 +24,13 @@
 	$query3 = "DELETE FROM order_details WHERE tableno='$table'";
 	$result3 = mysqli_query($conn,$query3);
 
-	echo "<script>window.location = 'staff_index.php'</script>";
+	$updatedOrderDetails = "SELECT * FROM order_details";
+    $updatedOrderDetailsResult = mysqli_query($conn,$updatedOrderDetails);
+	$row_cnt = mysqli_num_rows($updatedOrderDetailsResult);
+	
 ?>
+<script>
+	localStorage.setItem('row-count',<?php echo $row_cnt ?>);
+	window.location = 'staff_index.php'
+
+</script>

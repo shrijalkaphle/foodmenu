@@ -70,19 +70,11 @@
             </div>
             <li class="divider"></li>
           <div class="notifications-wrapper">
-            <a class="content" href="#">
-              
-              <div class="notification-item">
-                <h4 class="item-title">Table 7 has placed an order</h4>
-                <p class="item-info">20/03/2019 2:35P.M</p>
-              </div>
-              
-            </a>
            
 
           </div>
             <li class="divider"></li>
-            <div class="notification-footer" onclick="setAllNotificationsAsSeen()"><h4 class="menu-title">Mark all as read<i class="glyphicon glyphicon-circle-arrow-right"></i></h4></div>
+            <div class="notification-footer" onclick="setAllNotificationsAsSeen()"><h4 class="menu-title">Clear All<i class="glyphicon glyphicon-circle-arrow-right"></i></h4></div>
           </ul>      
         </div>
         <script>
@@ -102,54 +94,64 @@
             });
 
           }
-          // <a class="content" href="#">
-              
-          //     <div class="notification-item">
-          //       <h4 class="item-title">Table 7 has placed an order</h4>
-          //       <p class="item-info">20/03/2019 2:35P.M</p>
-          //     </div>
-              
-          //   </a>
 
           function populateNotificationsDiv(notifications){
-
             let notificationsDiv = document.querySelector(".notifications-wrapper");
+            if(notifications.length > 0){
 
-            while (notificationsDiv.firstChild) {
-              notificationsDiv.removeChild(notificationsDiv.firstChild);
+              while (notificationsDiv.firstChild) {
+                notificationsDiv.removeChild(notificationsDiv.firstChild);
+              }
+
+              
+
+              notifications.forEach(function(notification){
+
+                
+
+                //Layout
+
+                let notificationItemDiv = document.createElement("div");
+                notificationItemDiv.className = "notification-item notification-item-"+notification.id;
+                notificationItemDiv.setAttribute("onclick","setNotificationAsSeen("+notification.id+")");
+
+                let itemTitle = document.createElement("h4");
+                itemTitle.className = "item-title";
+
+                let itemTitleText = document.createTextNode(notification.message);
+
+                let itemInfo = document.createElement("p");
+                itemInfo.className = "item-info";
+
+                let itemDate = document.createTextNode(notification.created_at);
+
+                itemInfo.appendChild(itemDate);
+                itemTitle.appendChild(itemTitleText);
+                
+                notificationItemDiv.appendChild(itemTitle);
+                notificationItemDiv.appendChild(itemInfo);
+
+                notificationsDiv.appendChild(notificationItemDiv);
+
+
+
+              });
+
+            }else{
+
+                while (notificationsDiv.firstChild) {
+                  notificationsDiv.removeChild(notificationsDiv.firstChild);
+                }
+
+
+                let notificationsNotFoundPar = document.createElement("p");
+                notificationsNotFoundPar.className = "notification-not-found-text";
+                let notificationsNotFoundText = document.createTextNode("No new notifications!");
+                notificationsNotFoundPar.appendChild(notificationsNotFoundText);
+                notificationsDiv.appendChild(notificationsNotFoundPar);
+
+
             }
-
-            notifications.forEach(function(notification){
-
-              
-
-              //Layout
-
-              let notificationItemDiv = document.createElement("div");
-              notificationItemDiv.className = "notification-item notification-item-"+notification.id;
-              notificationItemDiv.setAttribute("onclick","setNotificationAsSeen("+notification.id+")");
-
-              let itemTitle = document.createElement("h4");
-              itemTitle.className = "item-title";
-
-              let itemTitleText = document.createTextNode(notification.message);
-
-              let itemInfo = document.createElement("p");
-              itemInfo.className = "item-info";
-
-              let itemDate = document.createTextNode(notification.created_at);
-
-              itemInfo.appendChild(itemDate);
-              itemTitle.appendChild(itemTitleText);
-              
-              notificationItemDiv.appendChild(itemTitle);
-              notificationItemDiv.appendChild(itemInfo);
-
-              notificationsDiv.appendChild(notificationItemDiv);
-
-
-
-            });
 
           }
 
@@ -167,6 +169,7 @@
               type: "post",
               data: idData,
 				    success: function (response) {
+              removeAllNotifications();
             },
             error: function(jqXHR, textStatus, errorThrown) {
 
@@ -189,6 +192,14 @@
 
             });
 
+          }
+
+          function removeAllNotifications(){
+            let notificationsDiv  = document.querySelector(".notifications-wrapper");
+
+            while (notificationsDiv.firstChild) {
+              notificationsDiv.removeChild(notificationsDiv.firstChild);
+            }
           }
 
 

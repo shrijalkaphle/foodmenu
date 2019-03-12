@@ -179,5 +179,12 @@ background:#ccc;
 border-radius:4px;
 }
 
+.notification-footer{
+  cursor: pointer;
+}
 
+.notification-not-found-text{
 
+  margin-left: 6px;
+
+}
