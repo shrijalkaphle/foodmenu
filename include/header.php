@@ -61,7 +61,10 @@
         ?>
         <div class="dropdown notifications-dropdown">
           <a id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="/page.html">
-            <i class="glyphicon glyphicon-bell"></i>
+            <div class="notification-icon-div">
+              <span class="glyphicon glyphicon-bell"></span>
+              <span class="notification-badge badge">19</span>
+            </div>  
           </a>
           
           <ul class="dropdown-menu notifications" role="menu" aria-labelledby="dLabel">
@@ -78,6 +81,7 @@
           </ul>      
         </div>
         <script>
+          /* ====== Get and Populate Notifications Functions ====== */
           function getNotifications(){
             
             $.ajax({
@@ -97,12 +101,10 @@
 
           function populateNotificationsDiv(notifications){
             let notificationsDiv = document.querySelector(".notifications-wrapper");
+            setNotificationBadge(notifications);
             if(notifications.length > 0){
-
-              while (notificationsDiv.firstChild) {
-                notificationsDiv.removeChild(notificationsDiv.firstChild);
-              }
-
+              
+              removeAllChildren(notificationsDiv);
               
 
               notifications.forEach(function(notification){
@@ -139,10 +141,7 @@
 
             }else{
 
-                while (notificationsDiv.firstChild) {
-                  notificationsDiv.removeChild(notificationsDiv.firstChild);
-                }
-
+                removeAllChildren(notificationsDiv);
 
                 let notificationsNotFoundPar = document.createElement("p");
                 notificationsNotFoundPar.className = "notification-not-found-text";
@@ -154,6 +153,8 @@
             }
 
           }
+
+          /* ====== Notifications Visibility Functions ====== */
 
           function setNotificationAsSeen(id){
 
@@ -200,6 +201,36 @@
             while (notificationsDiv.firstChild) {
               notificationsDiv.removeChild(notificationsDiv.firstChild);
             }
+          }
+
+          
+          /* ====== Notifications Badge Visibility Function ====== */
+          function setNotificationBadge(notifications){
+            
+            let badge = document.querySelector(".notification-badge");
+
+            let notificationsLength = notifications.length;
+            
+            if(notificationsLength>0){
+              
+              badge.style.display = "block";
+              badge.innerHTML = notificationsLength;
+            
+            }else{
+
+              badge.style.display = "none";
+
+            }
+
+          }
+          
+          /* ====== Utility Functions ====== */
+          function removeAllChildren(element){
+
+            while (element.firstChild) {
+              element.removeChild(element.firstChild);
+            }
+
           }
 
 

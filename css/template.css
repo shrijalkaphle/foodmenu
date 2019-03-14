@@ -188,3 +188,14 @@ border-radius:4px;
   margin-left: 6px;
 
 }
+
+.notification-icon-div{
+  position: relative;
+}
+
+.notification-badge{
+  position: absolute;
+  display: none;
+  left: 8px;
+  top: -6px;
+}
