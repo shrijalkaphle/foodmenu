@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 09, 2019 at 07:26 AM
+-- Generation Time: Mar 16, 2019 at 09:40 AM
 -- Server version: 10.1.37-MariaDB
--- PHP Version: 7.3.1
+-- PHP Version: 7.3.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -35,15 +35,6 @@ CREATE TABLE `cart` (
   `qty` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `cart`
---
-
-INSERT INTO `cart` (`id`, `tableno`, `productid`, `qty`) VALUES
-(88, 6, 3, 12),
-(89, 6, 4, 5),
-(90, 1, 5, 2);
-
 -- --------------------------------------------------------
 
 --
@@ -69,6 +60,38 @@ INSERT INTO `category` (`id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `notifications`
+--
+
+CREATE TABLE `notifications` (
+  `id` int(11) NOT NULL,
+  `message` varchar(40) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `seen_status` tinyint(1) DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `notifications`
+--
+
+INSERT INTO `notifications` (`id`, `message`, `created_at`, `seen_status`) VALUES
+(2, 'Table 5 has placed an order', '2019-03-14 04:56:31', 1),
+(3, 'Table 6 has placed an order', '2019-03-12 10:23:57', 1),
+(4, 'Table 6 has placed an order', '2019-03-12 10:14:48', 1),
+(5, 'Table 6 has placed an order', '2019-03-12 10:14:48', 1),
+(6, 'Table 9 has placed an order', '2019-03-12 10:14:48', 1),
+(7, 'Table 9 has placed an order', '2019-03-12 10:14:48', 1),
+(8, 'Table 9 has placed an order', '2019-03-12 10:14:48', 1),
+(9, 'Table 3 has placed an order', '2019-03-12 10:14:48', 1),
+(10, 'Table 3 has placed an order', '2019-03-12 10:14:48', 1),
+(11, 'Table 3 has placed an order', '2019-03-12 10:14:48', 1),
+(12, 'Table 3 has placed an order', '2019-03-12 10:14:48', 1),
+(13, 'Table 3 has placed an order', '2019-03-12 10:14:48', 1),
+(14, 'Table 3 has placed an order', '2019-03-12 10:26:39', 1);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `ordered`
 --
 
@@ -78,6 +101,15 @@ CREATE TABLE `ordered` (
   `productid` int(11) NOT NULL,
   `qty` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `ordered`
+--
+
+INSERT INTO `ordered` (`id`, `tableno`, `productid`, `qty`) VALUES
+(90, 3, 3, 1),
+(91, 3, 4, 1),
+(92, 3, 4, 1);
 
 -- --------------------------------------------------------
 
@@ -90,6 +122,16 @@ CREATE TABLE `order_details` (
   `tableno` int(11) NOT NULL,
   `price` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `order_details`
+--
+
+INSERT INTO `order_details` (`id`, `tableno`, `price`) VALUES
+(25, 1, 490),
+(39, 3, 320),
+(40, 3, 170),
+(41, 3, 0);
 
 -- --------------------------------------------------------
 
@@ -128,6 +170,37 @@ CREATE TABLE `sales` (
   `qty` int(11) NOT NULL,
   `datetime` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `sales`
+--
+
+INSERT INTO `sales` (`id`, `productid`, `qty`, `datetime`) VALUES
+(1, 5, 46, '2019-03-10 08:41:38'),
+(2, 3, 33, '2019-03-10 08:41:38'),
+(3, 4, 1, '2019-03-10 08:41:38'),
+(4, 4, 1, '2019-03-10 09:05:14'),
+(5, 3, 1, '2019-03-12 10:51:11'),
+(6, 6, 1, '2019-03-12 10:51:11'),
+(7, 4, 1, '2019-03-12 10:51:11'),
+(8, 7, 1, '2019-03-12 10:51:11'),
+(9, 3, 1, '2019-03-12 10:51:11'),
+(10, 4, 1, '2019-03-12 10:51:11'),
+(11, 4, 1, '2019-03-12 10:56:56'),
+(12, 5, 1, '2019-03-12 10:56:56'),
+(13, 4, 1, '2019-03-12 10:56:56'),
+(14, 4, 1, '2019-03-12 11:05:02'),
+(15, 4, 4, '2019-03-12 11:06:08'),
+(16, 5, 4, '2019-03-12 11:06:08'),
+(17, 7, 10, '2019-03-12 11:06:08'),
+(18, 3, 1, '2019-03-12 11:06:30'),
+(19, 5, 1, '2019-03-12 11:06:30'),
+(20, 4, 1, '2019-03-12 11:06:30'),
+(21, 3, 1, '2019-03-12 11:07:22'),
+(22, 4, 1, '2019-03-12 11:07:22'),
+(23, 5, 1, '2019-03-12 11:07:22'),
+(24, 6, 1, '2019-03-12 11:07:22'),
+(25, 7, 2, '2019-03-12 11:07:22');
 
 -- --------------------------------------------------------
 
@@ -171,6 +244,12 @@ ALTER TABLE `category`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `ordered`
 --
 ALTER TABLE `ordered`
@@ -208,7 +287,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=92;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -217,16 +296,22 @@ ALTER TABLE `category`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
+-- AUTO_INCREMENT for table `notifications`
+--
+ALTER TABLE `notifications`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
 -- AUTO_INCREMENT for table `ordered`
 --
 ALTER TABLE `ordered`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=93;
 
 --
 -- AUTO_INCREMENT for table `order_details`
 --
 ALTER TABLE `order_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT for table `product`
@@ -238,7 +323,7 @@ ALTER TABLE `product`
 -- AUTO_INCREMENT for table `sales`
 --
 ALTER TABLE `sales`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `user`

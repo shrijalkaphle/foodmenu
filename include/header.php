@@ -57,13 +57,13 @@
         ?>
         <li><a href="sales.php">View Stats</a></li>
         <?php
-            } else{
+            } else if($_SESSION['role'] == "staff"){
         ?>
         <div class="dropdown notifications-dropdown">
           <a id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="/page.html">
             <div class="notification-icon-div">
               <span class="glyphicon glyphicon-bell"></span>
-              <span class="notification-badge badge">19</span>
+              <span class="notification-badge badge">0</span>
             </div>  
           </a>
           
@@ -223,7 +223,7 @@
             }
 
           }
-          
+
           /* ====== Utility Functions ====== */
           function removeAllChildren(element){
 

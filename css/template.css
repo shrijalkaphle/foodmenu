@@ -199,3 +199,9 @@ border-radius:4px;
   left: 8px;
   top: -6px;
 }
+
+/* Stats Page */
+.total-sales-table-div{
+  height: 100px;
+  overflow-x: scroll;
+}
