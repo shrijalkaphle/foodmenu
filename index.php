@@ -470,13 +470,13 @@
 
 <div class="container">
 	<div class="row">
-		<div class="col-md-6">
+		<!-- <div class="col-md-6">
 			<div>
 				<form class="form-inline" method="post">
 					<input type="text" class="form-control search-text-field" placeholder="Search" name="name">
 				</form>
 			</div>
-		</div>
+		</div> -->
 		<div class="col-md-6">
 			<div class="row form-group buttons-div"  id="menu">
 				<div class="col-md-4">
@@ -488,15 +488,23 @@
 					<a href="view.php?tabno=<?php echo($tno) ?>"><button class="btn btn-primary" style="background-color: #2A877E; ">View all Order</button></a>	
 				</div>
 				<div class="col-md-4">	
-					<a href="session_table.php"><button class="btn btn-primary" style="background-color: #2A877E;">Back to Table Selection</button></a>
+					<a href="logout.php"><button class="btn btn-primary" style="background-color: #2A877E;">Back to Table Selection</button></a>
 				</div>
+			</div>
+		</div>
+
+		<div class="col-md-6">
+			<div>
+				<form class="form-inline" method="post">
+					<input type="text" class="form-control search-text-field" placeholder="Search" name="name">
+				</form>
 			</div>
 		</div>
 		
 	</div>
 </div>
 
-<div>
+<!-- <div>
 	<br><br>
 	<div class="container">
 		<div class="nav nav-tabs">
@@ -522,7 +530,10 @@
 	</div>
 </div>
 <br><br>
-<div>
+<div> -->
+<div class="container">
+	<h3>Click to add order</h3>
+</div>
 	<div class="container">
 	<div class="row foods">
 	<?php

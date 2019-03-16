@@ -1,5 +1,5 @@
 <?php
-	include 'include/dbconnect.php';
+	include '../include/dbconnect.php';
 	$id =  $_GET['id'];
 
 	$query = "DELETE FROM category WHERE id='$id'";

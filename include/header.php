@@ -1,6 +1,6 @@
 <?php
   error_reporting(0);
-  include 'include/dbconnect.php';
+  include 'C:\xampp\htdocs\foodmenu\include\dbconnect.php';
   session_start();
 ?>
 
@@ -8,10 +8,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-  <script type="text/javascript" src="js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="../js/bootstrap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-  <link rel="stylesheet" type="text/css" href="css/template.css">
+  <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="../css/template.css">
 </head>
 
 
@@ -30,7 +30,7 @@
           if ($_SESSION['role']) {
             if($_SESSION['role'] == "staff") {
         ?>
-              <a class="navbar-brand" href="staff_index.php">Staff Page</a>
+              <a class="navbar-brand" href="staff_index.php">Food Order System</a>
         <?php
             } else {
         ?>
@@ -59,6 +59,7 @@
         <?php
             } else if($_SESSION['role'] == "staff"){
         ?>
+        <li>
         <div class="dropdown notifications-dropdown">
           <a id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="/page.html">
             <div class="notification-icon-div">
@@ -80,12 +81,13 @@
             <div class="notification-footer" onclick="setAllNotificationsAsSeen()"><h4 class="menu-title">Clear All<i class="glyphicon glyphicon-circle-arrow-right"></i></h4></div>
           </ul>      
         </div>
+        </li>
         <script>
           /* ====== Get and Populate Notifications Functions ====== */
           function getNotifications(){
             
             $.ajax({
-              url: "api/notifications/getallnotifications.php",
+              url: "../api/notifications/getallnotifications.php",
               type: "post",
 				    success: function (response) {
               populateNotificationsDiv(response);
@@ -166,7 +168,7 @@
             
 
             $.ajax({
-              url: "api/notifications/setNotificationsAsRead.php",
+              url: "../api/notifications/setNotificationsAsRead.php",
               type: "post",
               data: idData,
 				    success: function (response) {
@@ -238,7 +240,7 @@
         <?php
             }
         ?>
-        <li><a href="logout.php"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span></a></li>
+        <li><a href="../logout.php?stat=1"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span></a></li>
         <?php
           }
         ?>

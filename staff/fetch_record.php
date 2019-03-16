@@ -1,7 +1,6 @@
 <?php
-	include 'include/dbconnect.php';
-	if($_POST['rowid']) {
-    	$tid = $_POST['rowid']; //escape string
+	include '../include/dbconnect.php';
+	$tid = $_POST['rowid']; //escape string
 
 ?>
 
@@ -53,9 +52,5 @@
 </div>
 
 <div class="modal-footer">
-    <a href="paid.php?tid=<?php echo($tid) ?>"><button type="button" class="btn btn-primary">Paid</button></a>	
+    <a href="../paid.php?tid=<?php echo($tid)?>"><button type="button" class="btn btn-primary">Paid</button></a>	
 </div>
-
-<?php
- 	}
-?>

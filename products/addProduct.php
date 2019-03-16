@@ -1,5 +1,5 @@
 <?php
-    include 'include/header.php';
+    include '../include/header.php';
 
     $id = $_GET['id'];
 
@@ -12,7 +12,7 @@
 <?php
     if (isset($_POST['add'])) {
 
-        $target = "images/".basename($_FILES['image']['name']);
+        $target = "../images/".basename($_FILES['image']['name']);
 
         $name = $_POST['name'];
         $cat = $_POST['cat'];

@@ -1,9 +1,9 @@
 <?php
-	include 'include/header.php';
+	include '../include/header.php';
 
     if(!isset($_SESSION['role'])) {
         $msg = "Cannot view This page! Login to Continue!";
-        echo "<script>window.location.replace('login.php?msg=$msg');</script>";
+        echo "<script>window.location.replace('../login.php?msg=$msg');</script>";
     } 
 
 ?>
@@ -14,7 +14,7 @@
     <button class="accordion">Category <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span> </button>
     <div class="panel">
         <br>
-        <a href="addCategory.php" style="float: right"><button class="btn btn-default">Add Category</button></a>
+        <a href="../category/addCategory.php" style="float: right"><button class="btn btn-default">Add Category</button></a>
         <h2>Category List</h2>
         <table class="table table-striped">
             <thead>
@@ -32,10 +32,10 @@
                         <td><?php echo stripslashes($row["id"]); ?></td>
                         <td><?php echo stripslashes($row["name"]); ?></td>
                         <td>
-                            <a href="editCategory.php?id=<?php echo $row["id"]?>">
+                            <a href="../category/editCategory.php?id=<?php echo $row["id"]?>">
                                 <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                             </a>	|
-                            <a href="deleteCategory.php?id=<?php echo $row["id"]?>">
+                            <a href="../category/deleteCategory.php?id=<?php echo $row["id"]?>">
                                 <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                             </a>
                         </td>
@@ -54,7 +54,7 @@
     <button class="accordion">Product <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span> </button>
     <div class="panel">
         <br>
-        <a href="addProduct.php" style="float: right"><button class="btn btn-default">Add Product</button></a>
+        <a href="../products/addProduct.php" style="float: right"><button class="btn btn-default">Add Product</button></a>
         <h2>Product List</h2>
         <table class="table table-striped">
             <thead>
@@ -74,12 +74,12 @@
                         <td><?php echo stripslashes($row["catid"]); ?></td>
                         <td><?php echo stripslashes($row["name"]); ?></td>
                         <td><?php echo stripslashes($row["price"]); ?></td>
-                        <td><img src="images/<?php echo stripslashes($row["image"]); ?>" height="150px"></td>
+                        <td><img src="../images/<?php echo stripslashes($row["image"]); ?>" height="150px"></td>
                         <td>
-                            <a href="editProduct.php?id=<?php echo $row["id"]?>">
+                            <a href="../products/editProduct.php?id=<?php echo $row["id"]?>">
                                 <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                             </a>	|
-                            <a href="deleteProduct.php?id=<?php echo $row["id"]?>">
+                            <a href="../products/deleteProduct.php?id=<?php echo $row["id"]?>">
                                 <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                             </a>
                         </td>
@@ -98,7 +98,7 @@
     <button class="accordion">Users <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span> </button>
     <div class="panel">
         <br>
-        <a href="addUser.php" style="float: right"><button class="btn btn-default">Add User</button></a>
+        <a href="../user/addUser.php" style="float: right"><button class="btn btn-default">Add User</button></a>
         <h2>User List</h2>
         <table class="table table-striped">
             <thead>
@@ -122,7 +122,7 @@
                         <td><?php echo stripslashes($row["dob"]); ?></td>
                         <td><?php echo stripslashes($row["role"]); ?></td>
                         <td>
-                            <a href="deleteUser.php?id=<?php echo $row["id"]?>">
+                            <a href="../user/deleteUser.php?id=<?php echo $row["id"]?>">
                                 <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                             </a>
                         </td>

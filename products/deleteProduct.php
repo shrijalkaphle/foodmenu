@@ -1,5 +1,5 @@
 <?php
-	include ('include/dbconnect.php');
+	include ('../include/dbconnect.php');
 	$id  = $_GET['id'];
 
 	$res=mysqli_query($conn,"SELECT image FROM product WHERE id='$id'");

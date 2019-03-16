@@ -1,8 +1,8 @@
 <?php
-  include 'include/header.php';
+  include '../include/header.php';
   if(!isset($_SESSION['role'])) {
     $msg = "Cannot view This page! Login to Continue!";
-    echo "<script>window.location.replace('login.php?msg=$msg');</script>";
+    echo "<script>window.location.replace('../login.php?msg=$msg');</script>";
   } 
 ?>
 <!-- <meta http-equiv="refresh" content="1"> -->
@@ -39,7 +39,7 @@
 <div class="order-page">
 <div id="show">
   <div class="loading">
-    <img class="loading-image" src="images/loading.gif">
+    <img class="loading-image" src="../images/loading.gif">
   </div>
 </div>
 
@@ -115,12 +115,13 @@
   }
 
   function playNotificationSound(){
-    var audio = new Audio('sounds/notification.mp3');
+    var audio = new Audio('../sounds/notification.mp3');
     audio.play();
   }
 
 
 </script>
+
 
 <div class="modal fade" id="ModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">

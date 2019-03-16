@@ -8,7 +8,7 @@
 		//check user
 
 		$query = "SELECT * FROM user WHERE username = '$username' AND password = '$pwd'";
-		$result = mysqli_query($conn,$query) or die('error');
+		$result = mysqli_query($conn,$query);
 
 		$row = mysqli_fetch_assoc($result);
 		$num = mysqli_num_rows($result);
@@ -18,9 +18,9 @@
 		} else {
 			$_SESSION['role'] = $row['role'];
 			if ($_SESSION['role'] == "admin") {
-				echo "<script>window.location = 'admin_index.php'</script>";
+				echo "<script>window.location = 'admin/admin_index.php'</script>";
 			} elseif ($_SESSION['role'] == "staff") {
-				echo "<script>window.location = 'staff_index.php'</script>";
+				echo "<script>window.location = 'staff/staff_index.php'</script>";
 			}
 		}
 	}

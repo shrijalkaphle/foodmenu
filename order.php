@@ -29,6 +29,21 @@
 	$query4 = "INSERT INTO order_details(tableno,price) VALUES ('$tno','$total')";
 	$result4 = mysqli_query($conn,$query4);
 
+	// $query4 = "SELECT * FROM order_details WHERE tableno = '$tno'";
+	// $result4 = mysqli_query($conn,$query4);
+	// $r1 = mysqli_fetch_assoc($result4);
+	// $n = mysqli_num_rows($result4);
+	// if($n != 0) {
+	// 	$price = $r1['price'];
+	// 	$total = $price + $total;
+	// 	$query5 = "INSERT INTO order_details(tableno,price) VALUES ('$tno','$total')";
+	// 	$result5 = mysqli_query($conn,$query5);
+	// } else {
+	// 	$query5 = "INSERT INTO order_details(tableno,price) VALUES ('$tno','$total')";
+	// 	$result5 = mysqli_query($conn,$query5);
+	}
+
+
 	//Notifications Table
 	$message = "Table ".$tno." has placed an order";
 	$insertIntoNotificationsTableQuery = "INSERT INTO notifications(message) VALUES('$message')";
