@@ -28,7 +28,7 @@
 
 	$query4 = "INSERT INTO order_details(tableno,price) VALUES ('$tno','$total')";
 	$result4 = mysqli_query($conn,$query4);
-	}
+	
 
 
 	//Notifications Table

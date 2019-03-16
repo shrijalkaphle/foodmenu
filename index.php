@@ -2,6 +2,11 @@
 	include 'include/header.php';
 	//$tno = null;
 ?>
+<head>
+	<link rel="stylesheet" type="text/css" href="css\bootstrap.min.css">
+  	<link rel="stylesheet" type="text/css" href="css\template.css">
+  	<script type="text/javascript" src="js\bootstrap.min.js"></script>
+</head>
 
 <?php
 	if (isset($_POST['tableno'])) {
@@ -485,7 +490,7 @@
 					</button></a>	
 				</div>
 				<div class="col-md-4">
-					<a href="view.php?tabno=<?php echo($tno) ?>"><button class="btn btn-primary" style="background-color: #2A877E; ">View all Order</button></a>	
+					<a href="viewOrder.php?tabno=<?php echo($tno) ?>"><button class="btn btn-primary" style="background-color: #2A877E; ">View all Order</button></a>	
 				</div>
 				<div class="col-md-4">	
 					<a href="logout.php"><button class="btn btn-primary" style="background-color: #2A877E;">Back to Table Selection</button></a>
@@ -646,7 +651,7 @@
 	function ask() {
 		var ask = window.confirm("Confirm Order?");
     	if (ask) {
-        	window.location = 'order.php?tno=<?php echo($tno) ?>';
+        	window.location = 'placeOrder.php?tno=<?php echo($tno) ?>';
     	}
 	}
 

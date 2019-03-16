@@ -31,6 +31,6 @@
 ?>
 <script>
 	localStorage.setItem('row-count',<?php echo $row_cnt ?>);
-	window.location = 'staff_index.php'
+	window.location = 'staff/staff_index.php'
 
 </script>
