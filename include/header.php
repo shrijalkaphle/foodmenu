@@ -240,7 +240,7 @@
         <?php
             }
         ?>
-        <li><a href="../logout.php?stat=1"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span></a></li>
+        <li><a href="../logout.php"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span></a></li>
         <?php
           }
         ?>
