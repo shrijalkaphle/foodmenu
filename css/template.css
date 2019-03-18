@@ -3,7 +3,8 @@
 }
 
 .single-food {
-	background-color: white;
+  background-color: white;
+  position: relative;
 }
 
 .single-food:hover {
@@ -204,4 +205,18 @@ border-radius:4px;
 .total-sales-table-div{
   height: 100px;
   overflow-x: scroll;
+}
+
+/* Product Quantity Modifier */
+.bottom-quantity-number{
+  display: inline;
+  margin: 0 33%;
+  font-size: 17px;
+  text-align: center;
+}
+
+
+.bottom-increase-product-quantity{
+  right: 0;
+
 }

@@ -96,12 +96,10 @@
 
 		function modifyQuantity(action,id){
 
-			console.log("Button Clicked");
-
 			let selector = ".product-qty-"+id;
 
 			let priceSelector = "product-qty-"+id;
-1
+
 			let qty = parseInt(document.querySelector(selector).innerHTML);
 			
 			let datas = {
@@ -142,7 +140,8 @@
 
 			let qtyString = " " + qty + " ";
 			document.querySelector(selector).innerHTML = qtyString;
-
+			
+			updateBottomQuantityCounter(id,qty);
 			datas = JSON.stringify(datas);
 
 			console.log(datas);
@@ -283,6 +282,7 @@
 					
 					/*======= Name Cell =======*/
 					firstCell.appendChild(nameText);
+					firstCell.className = "product-name";
 
 					/*======= Price Cell =======*/
 					secondCell.appendChild(priceText);
@@ -447,12 +447,26 @@
 
 			});
 
+			getProductIdFromProductCartId(5);
+
 
 
 		}
 
 		function funOrder() {
 			document.getElementById('menu').scrollIntoView();
+		}
+
+		function updateBottomQuantityCounter(productId,qty){
+			let selector = ".bottom-quantity-modifier-div-of-"+productId;
+			document.querySelector(selector).querySelector(".bottom-quantity-number").innerHTML = qty;
+		}
+
+		function getProductIdFromProductCartId(productCartID){
+			let productName = document.querySelector(".product-row-"+productCartID).querySelector(".product-row").innerHTML;
+			console.log(productName);	
+
+
 		}
 
 	
@@ -565,8 +579,25 @@
     						<div class="text">
     							<input type="submit" name="add" class="btn btn-default" value="Add Order" onclick="addProductToCart(<?php echo $_SESSION['table'] ?>,<?php echo $row['id']; ?>,1)" data-toggle="modal" data-target="#ModalCenter">
     						</div>
-  					</div>
+					  </div>
+					
 				</div>
+
+				<div class="bottom-quantity-modifier-div bottom-quantity-modifier-div-of-<?php echo $row['id']; ?>">
+						<a href="#" class="btn btn-danger btn-lg bottom-decrease-product-quantity">
+							<span class="glyphicon glyphicon-minus"></span>  
+						</a>
+
+						<div class="bottom-quantity-number">
+							-
+						</div>
+			
+						<a href="#" class="btn btn-info btn-lg bottom-increase-product-quantity">
+							<span class="glyphicon glyphicon-plus"></span>  
+						</a>
+						
+					</div>
+			
 			</div>
 	<?php
 		endwhile;
