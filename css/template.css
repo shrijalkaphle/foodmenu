@@ -220,3 +220,11 @@ border-radius:4px;
   right: 0;
 
 }
+
+.order-unseen{
+  color: red;
+}
+
+.order-seen{
+  color: black;
+}
