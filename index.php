@@ -2,11 +2,7 @@
 	include 'include/header.php';
 	//$tno = null;
 ?>
-<head>
-	<link rel="stylesheet" type="text/css" href="css\bootstrap.min.css">
-  	<link rel="stylesheet" type="text/css" href="css\template.css">
-  	<script type="text/javascript" src="js\bootstrap.min.js"></script>
-</head>
+
 
 <?php
 	if (isset($_POST['tableno'])) {
@@ -48,7 +44,6 @@
 
 
 
-<head>
 	<title>Food Order System</title>
 	<script type="text/javascript">
 		function addProductToCart(tableNo,productId,qty){
@@ -73,9 +68,8 @@
 					data: datas,
 
 				success: function (response) {
-
-					console.log(response);
-					loadCart(tableNo);
+					
+					actionsWhenAProductIsAddedToCart(tableNo,productId);
 
 				},
 				error: function(jqXHR, textStatus, errorThrown) {
@@ -85,25 +79,26 @@
 				}
 			});
 			
-			
+		}
 
+		function actionsWhenAProductIsAddedToCart(tableNo,productId){
+			loadCart(tableNo);
+					
 			//toggle tick
 			toggleTick(productId);
-
 			
-
+			//Set bottom Modifier Number to 0
+			setBottomQuantityModifierNumberAsZero(productId);
+			
+			//Activate Buttons
+			activateBottomQuantityModifierButtons(productId);
 		}
 
 		function modifyQuantity(action,id){
 
-			let selector = ".product-qty-"+id;
-
-			let priceSelector = "product-qty-"+id;
-
-			let qty = parseInt(document.querySelector(selector).innerHTML);
+			let qty = getProductQuantity(id);
 			
 			let datas = {
-				"action":action,
 				"id":id,
 			}; 
 
@@ -119,9 +114,6 @@
 
 				updatedPrice = price * qty;
 
-
-				// updateTotalPrice();
-
 				datas.qty = qty;
 
 			}else{
@@ -130,8 +122,6 @@
 
 				updatedPrice = parseInt(price) * parseInt(qty);
 
-				// updateTotalPrice();
-
 				datas.qty = qty;
 
 			}
@@ -139,9 +129,9 @@
 			document.querySelector(".product-row-"+id).querySelector(".product-subtotal-price").innerHTML = "Rs. " + updatedPrice;
 
 			let qtyString = " " + qty + " ";
-			document.querySelector(selector).innerHTML = qtyString;
+			getProductQuantityDiv(id).innerHTML = qtyString;
 			
-			updateBottomQuantityCounter(id,qty);
+			
 			datas = JSON.stringify(datas);
 
 			console.log(datas);
@@ -161,6 +151,16 @@
 
 
 		}
+
+		function getProductQuantity(id){
+			return parseInt(getProductQuantityDiv(id).innerHTML);
+		}
+
+		function getProductQuantityDiv(id){
+			return document.querySelector(".product-qty-"+id);
+		}
+
+		
 
 		function updateTotalPrice(){
 
@@ -237,8 +237,6 @@
 					console.log(textStatus, errorThrown);
 				}
 			});
-
-
 
 		}
 
@@ -447,9 +445,6 @@
 
 			});
 
-			getProductIdFromProductCartId(5);
-
-
 
 		}
 
@@ -462,16 +457,8 @@
 			document.querySelector(selector).querySelector(".bottom-quantity-number").innerHTML = qty;
 		}
 
-		function getProductIdFromProductCartId(productCartID){
-			let productName = document.querySelector(".product-row-"+productCartID).querySelector(".product-row").innerHTML;
-			console.log(productName);	
-
-
-		}
-
-	
+		
 	</script>
-</head>
 
 <?php
 	if ($_SESSION['table'] != 0) {
@@ -489,13 +476,6 @@
 
 <div class="container">
 	<div class="row">
-		<!-- <div class="col-md-6">
-			<div>
-				<form class="form-inline" method="post">
-					<input type="text" class="form-control search-text-field" placeholder="Search" name="name">
-				</form>
-			</div>
-		</div> -->
 		<div class="col-md-6">
 			<div class="row form-group buttons-div"  id="menu">
 				<div class="col-md-4">
@@ -584,19 +564,19 @@
 				</div>
 
 				<div class="bottom-quantity-modifier-div bottom-quantity-modifier-div-of-<?php echo $row['id']; ?>">
-						<a href="#" class="btn btn-danger btn-lg bottom-decrease-product-quantity">
+						<button href="#" class="btn btn-danger btn-lg bottom-decrease-product-quantity" disabled onclick="decreaseBottomQuantityModifierNumber(<?php echo $row['id']; ?>)">
 							<span class="glyphicon glyphicon-minus"></span>  
-						</a>
+						</button>
 
 						<div class="bottom-quantity-number">
 							-
 						</div>
 			
-						<a href="#" class="btn btn-info btn-lg bottom-increase-product-quantity">
+						<button href="#" class="btn btn-info btn-lg bottom-increase-product-quantity"  disabled onclick="increaseBottomQuantityModifierNumber(<?php echo $row['id']; ?>)">
 							<span class="glyphicon glyphicon-plus"></span>  
-						</a>
+						</button>
 						
-					</div>
+				</div>
 			
 			</div>
 	<?php
@@ -692,3 +672,81 @@
 			dynamicSearch();
 	}
 </script>
+
+<script>
+	// Bottom Quantity Modifier Functions
+	function increaseBottomQuantityModifierNumber(id){
+		let quantity = getBottomQuantityModifierNumber(id);
+		quantity++;
+		setBottomQuantityModifierNumber(quantity,id);
+		
+		//Update quantity in DB
+		modifyDbProductQuantity(id,quantity);
+	}
+
+	function decreaseBottomQuantityModifierNumber(id){
+		let quantity = getBottomQuantityModifierNumber(id);
+		checkIfBottomQuantityModifierNumberIsZero(id) ? quantity = 0 : quantity--;
+		setBottomQuantityModifierNumber(quantity,id);
+
+		//Update quantity in DB
+		modifyDbProductQuantity(id,quantity);
+	}
+	
+	function getBottomQuantityModifierNumber(id){
+		let quantity = parseInt(getBottomQuantityModifierDivDOM(id).querySelector(".bottom-quantity-number").innerHTML);
+		return quantity;
+	}
+
+	function setBottomQuantityModifierNumber(num,id){
+		getBottomQuantityModifierDivDOM(id).querySelector(".bottom-quantity-number").innerHTML = num;
+	}
+
+	function checkIfBottomQuantityModifierNumberIsZero(id){
+		return getBottomQuantityModifierNumber(id)==0 ? true : false;
+	}
+
+	function setBottomQuantityModifierNumberAsZero(id){
+		setBottomQuantityModifierNumber(0,id);
+	}	
+
+	function activateBottomQuantityModifierButtons(id){
+		getBottomQuantityModifierDivDOM(id).querySelector(".bottom-increase-product-quantity").disabled = false;
+		getBottomQuantityModifierDivDOM(id).querySelector(".bottom-decrease-product-quantity").disabled = false;
+	}
+
+	function getBottomQuantityModifierDivDOM(id){
+		let selector = ".bottom-quantity-modifier-div-of-"+id;
+		return document.querySelector(selector);
+	}
+
+	function modifyDbProductQuantity(id,quantity){
+
+		let url = <?php ROOT ?> + "/api/products/modifyQuantityByProductId.php";
+		let requestData = {
+			
+			"url":url,
+			
+			"method":"post",
+			
+			"data":{
+			
+				"id":id,
+			
+				"quantity":quantity
+			
+			}
+		}
+
+		sendAjaxRequest(requestData);
+	}
+
+
+
+
+
+
+</script>
+<?php
+	include '../include/footer.php';
+?>

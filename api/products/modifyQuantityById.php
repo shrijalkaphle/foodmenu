@@ -4,7 +4,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
     
  
 
-    require('include/dbconnect.php');
+    require('../../include/dbconnect.php');
    
 
     /*============ Get Post Data ===========*/
@@ -14,29 +14,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
 
     $response = [];
 
-	$status = $json_obj->action;
     $id = $json_obj->id;
     $qty = $json_obj->qty;
 
     /*============ Send Data ===========*/
     //check if product exist
 
-	if($status=="add"){
-
-		$query = "UPDATE cart SET qty = '$qty' WHERE id = '$id'";
-		$result = mysqli_query($conn, $query);
-
-	}else{
-
-		if ($qty == 0) {
-			$query = "DELETE FROM cart WHERE id = '$id'";
-			$result = mysqli_query($conn, $query);
-		} else {
-			$query = "UPDATE cart SET qty = '$qty' WHERE id = '$id'";
-			$result = mysqli_query($conn, $query);
-		}
-
-	}
+    if ($qty == 0) {
+        $query = "DELETE FROM cart WHERE id = '$id'";
+        $result = mysqli_query($conn, $query);
+    } else {
+        $query = "UPDATE cart SET qty = '$qty' WHERE id = '$id'";
+        $result = mysqli_query($conn, $query);
+    }
 
     echo json_encode($query);
 
