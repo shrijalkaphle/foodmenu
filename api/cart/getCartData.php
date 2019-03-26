@@ -3,7 +3,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
     
  
 
-  require('include/dbconnect.php');
+  require('../../include/dbconnect.php');
 
       /*============ Get Post Data ===========*/
       $json_str = file_get_contents('php://input');

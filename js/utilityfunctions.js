@@ -1,10 +1,10 @@
-function sendAjaxRequest(requestData){
+function sendAjaxRequest(requestData,callback){
     $.ajax({
       url: requestData.url ,
       type: requestData.method ,
       data: jsonStringifyObject(requestData.data) ,
     success: function (response) {
-      return response;
+      callback(response);
     },
     error: function(jqXHR, textStatus, errorThrown) {
       console.log(textStatus, errorThrown);

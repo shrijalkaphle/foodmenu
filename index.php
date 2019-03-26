@@ -85,10 +85,10 @@
 			loadCart(tableNo);
 					
 			//toggle tick
-			toggleTick(productId);
+			addTick(productId);
 			
 			//Set bottom Modifier Number to 0
-			setBottomQuantityModifierNumberAsZero(productId);
+			setBottomQuantityModifierNumberAsOne(productId);
 			
 			//Activate Buttons
 			activateBottomQuantityModifierButtons(productId);
@@ -137,7 +137,7 @@
 			console.log(datas);
 
 			$.ajax({
-					url: "modifyQty.php",
+					url: <?php ROOT ?> + "/api/products/modifyQuantityById.php",
 					type: "post",
 					data: datas,
 				success: function (response) {
@@ -192,7 +192,7 @@
 			requestData = JSON.stringify(requestData);
 
 			$.ajax({
-					url: "getCartData.php",
+					url: "<?php echo ROOT ?>/api/cart/getCartData.php",
 					type: "post",
 					data: requestData,
 				success: function (response) {
@@ -205,10 +205,16 @@
 
 		}
 
-		function toggleTick(id){
+		function addTick(id){
 			let foodDivSelector = ".single-food-"+id;
 			let foodDiv = document.querySelector(foodDivSelector);
 			foodDiv.querySelector(".tick-image").style.visibility = "visible";
+		}
+
+		function removeTick(id){
+			let foodDivSelector = ".single-food-"+id;
+			let foodDiv = document.querySelector(foodDivSelector);
+			foodDiv.querySelector(".tick-image").style.visibility = "hidden";
 		}
 
 		function setInitalTicks(tableNo){
@@ -220,14 +226,14 @@
 			requestData = JSON.stringify(requestData);
 
 			$.ajax({
-					url: "getCartData.php",
+					url: "<?php echo ROOT ?>/api/cart/getCartData.php",
 					type: "post",
 					data: requestData,
 				success: function (response) {
 
 					response.forEach(function(dataItem){
 
-						toggleTick(dataItem.productId);
+						addTick(dataItem.productId);
 
 
 					})
@@ -408,7 +414,7 @@
 			requestData = JSON.stringify(requestData);
 
 			$.ajax({
-					url: "deleteCartItem.php",
+					url: "<?php echo ROOT ?>/api/cart/removeProductFromCartByProductId.php",
 					type: "post",
 					data: requestData,
 				success: function (response) {
@@ -670,7 +676,8 @@
 	window.onload = function(){
 			setInitalTicks(7);
 			dynamicSearch();
-	}
+			setInitialBottomModifierQuantityAndEnableButton();
+		}
 </script>
 
 <script>
@@ -686,11 +693,31 @@
 
 	function decreaseBottomQuantityModifierNumber(id){
 		let quantity = getBottomQuantityModifierNumber(id);
-		checkIfBottomQuantityModifierNumberIsZero(id) ? quantity = 0 : quantity--;
-		setBottomQuantityModifierNumber(quantity,id);
+		if(checkIfBottomQuantityModifierNumberIsOne(id)){
+			actionsWhenBottomQuantityModifierNumberIsOne(id)	
+		}else{
+			quantity--;
+			setBottomQuantityModifierNumber(quantity,id);
+			
+			//Update quantity in DB
+			modifyDbProductQuantity(id,quantity);
+		}
+		
+	}
 
-		//Update quantity in DB
-		modifyDbProductQuantity(id,quantity);
+	function actionsWhenBottomQuantityModifierNumberIsOne(id){
+		if(getConfirmationForDeletingProductFromCart(id)){
+			deactivateBottomQuantityModifierButtons(id);
+			setBottomQuantityModifierNumberAsHyphen(id);
+			deleteProductFromCartByProductId(id);
+			removeTick(id);
+		}else{
+			setBottomQuantityModifierNumberAsOne(id);
+		}
+	}
+
+	function deleteProductFromCartByProductId(id){
+		modifyDbProductQuantity(id,0);
 	}
 	
 	function getBottomQuantityModifierNumber(id){
@@ -698,22 +725,38 @@
 		return quantity;
 	}
 
+	function getConfirmationForDeletingProductFromCart(id){
+		return confirm("Do you want to remove this product?");
+	}
+
+
 	function setBottomQuantityModifierNumber(num,id){
 		getBottomQuantityModifierDivDOM(id).querySelector(".bottom-quantity-number").innerHTML = num;
 	}
 
-	function checkIfBottomQuantityModifierNumberIsZero(id){
-		return getBottomQuantityModifierNumber(id)==0 ? true : false;
+	function checkIfBottomQuantityModifierNumberIsOne(id){
+		return getBottomQuantityModifierNumber(id)==1 ? true : false;
 	}
 
-	function setBottomQuantityModifierNumberAsZero(id){
-		setBottomQuantityModifierNumber(0,id);
+	function setBottomQuantityModifierNumberAsOne(id){
+		setBottomQuantityModifierNumber(1,id);
+	}	
+
+	function setBottomQuantityModifierNumberAsHyphen(id){
+		setBottomQuantityModifierNumber("-",id);
 	}	
 
 	function activateBottomQuantityModifierButtons(id){
 		getBottomQuantityModifierDivDOM(id).querySelector(".bottom-increase-product-quantity").disabled = false;
 		getBottomQuantityModifierDivDOM(id).querySelector(".bottom-decrease-product-quantity").disabled = false;
 	}
+
+	function deactivateBottomQuantityModifierButtons(id){
+		getBottomQuantityModifierDivDOM(id).querySelector(".bottom-increase-product-quantity").disabled = true;
+		getBottomQuantityModifierDivDOM(id).querySelector(".bottom-decrease-product-quantity").disabled = true;
+	}
+
+
 
 	function getBottomQuantityModifierDivDOM(id){
 		let selector = ".bottom-quantity-modifier-div-of-"+id;
@@ -722,7 +765,8 @@
 
 	function modifyDbProductQuantity(id,quantity){
 
-		let url = <?php ROOT ?> + "/api/products/modifyQuantityByProductId.php";
+		let url = "<?php echo ROOT ?>/api/products/modifyQuantityByProductId.php";
+		console.log(url);
 		let requestData = {
 			
 			"url":url,
@@ -742,7 +786,22 @@
 	}
 
 
-
+	function setInitialBottomModifierQuantityAndEnableButton(){
+		let url = "<?php echo ROOT ?>/api/cart/getCartData.php";
+		let requestData = {	
+			"url":url,
+			"method":"post",
+			"data":{
+				"tableNo":<?php echo $tno ?>,		
+			}
+		}
+		sendAjaxRequest(requestData,function(data){
+			for(let i=0;i<data.length;i++){
+				setBottomQuantityModifierNumber(data[i].quantity,data[i].productId);
+				activateBottomQuantityModifierButtons(data[i].productId);
+			}
+		});
+	}
 
 
 
