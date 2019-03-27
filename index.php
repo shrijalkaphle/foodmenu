@@ -127,22 +127,25 @@
 			}
 
 			document.querySelector(".product-row-"+id).querySelector(".product-subtotal-price").innerHTML = "Rs. " + updatedPrice;
-
 			let qtyString = " " + qty + " ";
 			getProductQuantityDiv(id).innerHTML = qtyString;
 			
 			
 			datas = JSON.stringify(datas);
-
+			console.log("From modify quantity");
 			console.log(datas);
 
 			$.ajax({
-					url: <?php ROOT ?> + "/api/products/modifyQuantityById.php",
+					url: "<?php echo ROOT ?>/api/products/modifyQuantityById.php",
 					type: "post",
 					data: datas,
 				success: function (response) {
 					console.log(response);
 					updateTotalPrice();
+					
+					//This updates bottom quantity modifier number and buttons
+					setInitialBottomModifierQuantityAndEnableButton();
+					
 				},
 				error: function(jqXHR, textStatus, errorThrown) {
 					console.log(textStatus, errorThrown);
@@ -672,8 +675,9 @@
     	}
 	}
 
-	//Set Product Ticks
+	
 	window.onload = function(){
+			//Set Product Ticks
 			setInitalTicks(7);
 			dynamicSearch();
 			setInitialBottomModifierQuantityAndEnableButton();
