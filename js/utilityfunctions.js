@@ -15,3 +15,11 @@ function sendAjaxRequest(requestData,callback){
 function jsonStringifyObject(data){
     return JSON.stringify(data);
 }
+
+function removeAllChildren(element){
+
+  while (element.firstChild) {
+    element.removeChild(element.firstChild);
+  }
+
+}
