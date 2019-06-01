@@ -2,7 +2,9 @@
   error_reporting(0);
   include 'C:\xampp\htdocs\foodmenu\include\dbconnect.php';
   //Main Root
-  define( 'ROOT', 'http://localhost/foodmenu' );
+  $localIP = getHostByName(getHostName());
+  $localIP = "http://".$localIP."/foodmenu";
+  define( 'ROOT', $localIP );
   session_start();
 ?>
 
