@@ -14,12 +14,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
 
     $response = [];
 
-    $productId = $json_obj->product_id;
+    $cartId = $json_obj->id;
 
     /*============ Send Data ===========*/
     //check if product exist
 
-    $query = "DELETE FROM cart WHERE productid = '$productId'";
+    $query = "DELETE FROM cart WHERE id = '$cartId'";
     $result = mysqli_query($conn, $query);
 
     echo json_encode($query);
